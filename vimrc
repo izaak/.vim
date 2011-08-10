@@ -17,11 +17,13 @@ set expandtab
 "set autoindent
 "set smartindent
 "set smarttab
-"
+
 set pastetoggle=<F2>
 
-"set background=dark
+set background=dark
 "colorscheme solarized
+
+set tags=./tags;
 
 if has("autocmd")
   " Drupal *.module and *.install files.
