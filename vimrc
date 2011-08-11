@@ -10,6 +10,12 @@ runtime macros/matchit.vim
 set number
 set ruler
 
+" requires 7.3
+"set clipboard=unnamedplus
+"set clipboard=unnamed
+nnoremap y "+y
+vnoremap y "+y
+
 " more effective buffer management
 set hidden
 
