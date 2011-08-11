@@ -12,7 +12,7 @@ set ruler
 
 " requires 7.3
 "set clipboard=unnamedplus
-"set clipboard=unnamed
+set clipboard=unnamed
 nnoremap y "+y
 vnoremap y "+y
 
