@@ -9,8 +9,8 @@ runtime macros/matchit.vim
 
 "set number
 set ruler
-nnoremap <Leader><F3> :set nonumber<CR>
-nnoremap <F3> :set number<CR>
+nnoremap <F3> :set number!<CR>
+"nnoremap <F4> :set smartindent!<CR>
 
 " more effective buffer management
 set hidden
