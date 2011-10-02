@@ -1,37 +1,26 @@
 call pathogen#infect()
 filetype plugin indent on
 
-" plugins for future reference
-" lusty- http://www.vim.org/scripts/script.php?script_id=1890
-" scratch- https://github.com/duff/vim-scratch
-
 runtime macros/matchit.vim
 
 if has("autocmd")
-  augroup module
-    autocmd BufRead,BufNewFile *.module set filetype=php
-    autocmd BufRead,BufNewFile *.install set filetype=php
-    autocmd BufRead,BufNewFile *.test set filetype=php
-  augroup END
-  autocmd Filetype php call SetPHPOptions()
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+    au FileType taglist setl nornu
+    au BufRead,BufNewFile *.module,*.install,*.test,*.engine set filetype=php
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+    au BufWritePre * :%s/\s\+$//e
+    au FileType coffee,ruby,html,css,php,javascript setl sw=2 sts=2
 endif
-
-function SetPHPOptions()
-"  set foldmethod=syntax
-"  let g:php_folding=1
-endfunction
 
 syntax enable
 
+set softtabstop=4
+set shiftwidth=4
+set expandtab
 set nocompatible
 set modelines=0
 set rnu
 set ruler
 "set encoding=utf-8
-set autoindent
-set smartindent
-set smarttab
 set hidden
 set wildmode=list:longest,full
 set backupdir=~/.vim/tmp,~/tmp,.
@@ -39,115 +28,91 @@ set directory=~/.vim/tmp,~/tmp,/tmp,/var/tmp,.
 set undodir=~/.vim/tmp,~/tmp,.
 set undofile
 set scrolloff=3
-set showmode
-set showcmd
-set ttyfast
 set laststatus=2
-nnoremap / /\v
-vnoremap / /\v
 set ignorecase
 set smartcase
 set gdefault
-set showmatch
 set list
 set listchars=tab:▸\ ,trail:⋅,nbsp:⋅
 set backspace=indent,eol,start
-" Highlight search terms...
 set hlsearch
-set incsearch " ...dynamically as they are typed.
+set incsearch
 set visualbell
+set tags=./tags; " Semicolon triggers search up the directory tree.
+set cursorline
 
-" this searches up the directory tree for tags
-set tags=./tags;
+" Make viewport scrolling faster
+no <C-e> 4<C-e>
+no <C-y> 4<C-y>
 
-"set wrap
-"set textwidth=79
-"set formatoptions=qrn1
-"set colorcolumn=89
+" I hate pressing shift.
+no ; :
+no ' ;
+no \ $
+no <tab> %
+nmap >> >gv
+nmap >> >gv
 
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
+no <C-j> <C-w>j
+no <C-k> <C-w>k
+no <C-h> <C-w>h
+no <C-l> <C-w>l
 
-" current directory is always matching the
-" content of the active window
-"set autochdir
+let mapleader = ","
+map <leader>c :close<CR>
+map <leader>g :TlistToggle<CR>
+map <leader><space> :nohls<cr><c-l>
+map <leader>s <C-w>s<C-w>j
+map <leader>v <C-w>v<C-w>l
 
-" faster viewport scrolling
-nnoremap <C-e> 4<C-e>
-nnoremap <C-y> 4<C-y>
-
-" not a bad idea
-"nnoremap <tab> %
-"vnoremap <tab> %
+map <F1> :call g:ToggleNuMode()<CR>
 
 function! g:ToggleNuMode()
-  if (&rnu == 0 && &nu == 0)
-    set rnu
-  elseif (&rnu == 1)
-    set nu
-  else
-    set nu!
-  endif
+    if (&rnu == 0 && &nu == 0)
+        set rnu
+    elseif (&rnu == 1)
+        set nu
+    else
+        set nu!
+    endif
 endfunc
+
+set pastetoggle=<F2>
+call togglebg#map("<F5>") " reverse color contrast
+
+no <up> <nop>
+no <down> <nop>
+no <left> <nop>
+no <right> <nop>
+ino <up> <nop>
+ino <down> <nop>
+ino <left> <nop>
+ino <right> <nop>
 
 let g:Tlist_Use_SingleClick = 1
 let g:Tlist_Exit_OnlyWindow = 1
-let g:Tlist_Auto_Highlight_Tag = 0
-let g:Tlist_Highlight_Tag_On_BufEnter = 0
+let g:Tlist_Auto_Highlight_Tag = 1
+let g:Tlist_Highlight_Tag_On_BufEnter = 1
 let g:Tlist_Show_One_File = 1
 let g:Tlist_Enable_Fold_Column = 0
 let g:Tlist_GainFocus_On_ToggleOpen = 0
 let g:Tlist_Compact_Format = 1
-let tlist_php_settings = 'php;f:functions;c:classes;v:variables'
+let g:Tlist_Use_Right_Window = 1
+let tlist_php_settings = 'php;f:functions;c:classes'
 
-let mapleader = ","
-nnoremap <F1> :call g:ToggleNuMode()<CR>
-nnoremap <F2> :set paste!<CR>
-" default is <F5>
-call togglebg#map("<F5>")
-nnoremap <leader><space> :nohls<cr><c-l>
-nnoremap ; :
-nnoremap \ ;
-nnoremap <leader>ws :%s/\s\+$//<cr>:nohlsearch<cr>
-nnoremap <leader>c :close<CR>
-nnoremap <leader>g :TlistToggle<CR>
-nnoremap <up> gk
-nnoremap <down> gj
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-h> <C-w>h
-noremap <C-l> <C-w>l
-
-nnoremap <leader>s <C-w>s<C-w>j
-nnoremap <leader>v <C-w>v<C-w>l
-
-" auto-save on losing focus
-"au FocusLost * :wa
+let g:syntastic_enable_signs=1
+"let g:syntastic_auto_loc_list=1
 
 set statusline=%<%f\ %h%m%y%r
 set statusline+=%#warningmsg#%{SyntasticStatuslineFlag()}%*
 set statusline+=%#error#%{&paste?'[paste]':''}%*
 set statusline+=%=%-14.(%l,%c%V%)\ %P
-let g:syntastic_enable_signs=1
-"let g:syntastic_auto_loc_list=1
 
 if has('gui_running')
-  set background=dark
-  let g:solarized_contrast = "high"
-  colorscheme solarized
+    set background=dark
+    let g:solarized_contrast = "high"
+    colorscheme solarized
 else
-  set background=dark
-  colorscheme solarized
+    set background=dark
+    colorscheme solarized
 endif
-
-" Kill trailing whitespace on save
-"autocmd BufWritePre * :%s/\s\+$//e
