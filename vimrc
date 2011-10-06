@@ -7,8 +7,10 @@ if has("autocmd")
     au FileType taglist setl nornu
     au BufRead,BufNewFile *.module,*.install,*.test,*.engine set filetype=php
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-    au BufWritePre * :%s/\s\+$//e
-    au FileType coffee,ruby,html,css,php,javascript setl sw=2 sts=2
+    au BufWritePre * :ma` | :%s/\s\+$//e | normal ``
+    au FileType coffee,ruby,html,css,php,sh,javascript setl sw=2 sts=2
+    au FileType html SyntasticDisable
+    au FocusLost * :wa
 endif
 
 syntax enable
@@ -50,8 +52,6 @@ no ; :
 no ' ;
 no \ $
 no <tab> %
-nmap >> >gv
-nmap >> >gv
 
 no <C-j> <C-w>j
 no <C-k> <C-w>k
@@ -78,27 +78,25 @@ function! g:ToggleNuMode()
 endfunc
 
 set pastetoggle=<F2>
+map <F2> :set paste!<CR>
+map <F3> :set list!<CR>
 call togglebg#map("<F5>") " reverse color contrast
 
 no <up> <nop>
 no <down> <nop>
 no <left> <nop>
 no <right> <nop>
-ino <up> <nop>
-ino <down> <nop>
-ino <left> <nop>
-ino <right> <nop>
 
 let g:Tlist_Use_SingleClick = 1
 let g:Tlist_Exit_OnlyWindow = 1
-let g:Tlist_Auto_Highlight_Tag = 1
+let g:Tlist_Auto_Highlight_Tag = 0
 let g:Tlist_Highlight_Tag_On_BufEnter = 1
 let g:Tlist_Show_One_File = 1
 let g:Tlist_Enable_Fold_Column = 0
 let g:Tlist_GainFocus_On_ToggleOpen = 0
 let g:Tlist_Compact_Format = 1
 let g:Tlist_Use_Right_Window = 1
-let tlist_php_settings = 'php;f:functions;c:classes'
+let tlist_php_settings = 'php;c:classes;f:functions;i:interfaces'
 
 let g:syntastic_enable_signs=1
 "let g:syntastic_auto_loc_list=1
