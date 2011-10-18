@@ -1,4 +1,5 @@
 call pathogen#infect()
+
 filetype plugin indent on
 
 runtime macros/matchit.vim
@@ -7,7 +8,8 @@ if has("autocmd")
     au FileType taglist setl nornu
     au BufRead,BufNewFile *.module,*.install,*.test,*.engine set filetype=php
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-    au BufWritePre * :ma` | :%s/\s\+$//e | normal ``
+    au BufWritePre * :KeepView :%s/\s\+$//e
+    au BufEnter :Rooter
     au FileType coffee,ruby,html,css,php,sh,javascript setl sw=2 sts=2
     au FileType html SyntasticDisable
     au FocusLost * :wa
@@ -47,11 +49,13 @@ set cursorline
 no <C-e> 4<C-e>
 no <C-y> 4<C-y>
 
+cabbr <expr> %% expand('%:p:h')
+
 " I hate pressing shift.
 no ; :
 no ' ;
 no \ $
-no <tab> %
+map <tab> %
 
 no <C-j> <C-w>j
 no <C-k> <C-w>k
@@ -64,6 +68,7 @@ map <leader>g :TlistToggle<CR>
 map <leader><space> :nohls<cr><c-l>
 map <leader>s <C-w>s<C-w>j
 map <leader>v <C-w>v<C-w>l
+map <Leader>e :e <C-R>=expand('%:p:h') . '/'<CR>
 
 map <F1> :call g:ToggleNuMode()<CR>
 
